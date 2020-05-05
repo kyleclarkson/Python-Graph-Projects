@@ -30,7 +30,7 @@ class Edge:
         self._to = v
         self._element = element
 
-    def endpoint(self):
+    def endpoints(self):
         """ Returns (u,v) tuple of edge endpoints """
         return (self._from, self._to)
 
@@ -113,15 +113,30 @@ class Graph:
 
     def insert_edge(self, u, v, x=None):
         """ Insert and return a new edge with element x."""
-        pass
+        e = Edge(u, v, x)
+        self._outgoing[u][v] = e
+        self._incoming[v][u] = e
 
     def remove_vertex(self, v):
         """ Remove a vertex and return its element."""
-        pass
+        result = Vertex.element(v)
+
+        # remove vertex by removing all edges incident to it
+        self._outgoing[v] = None
+        if self.is_directed():
+            self._incoming[v] = None
+        return result
 
     def remove_edge(self, e):
         """ Remove an edge and return its element."""
-        pass
+        result = Edge.endpoints(e)
+        u = result[0]
+        v = result[1]
+        # Remove endpoint vertices
+        self._outgoing[u][v] = None
+        self._incoming[v][u] = None
+
+        return result
 
 
 
