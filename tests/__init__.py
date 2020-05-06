@@ -2,13 +2,17 @@ from Graph import Graph
 import Traversal
 
 G = Graph()
+Graph.read_from_csv("")
 
-u = G.insert_vertex('u')
-v = G.insert_vertex('v')
-w = G.insert_vertex('w')
+u = G.insert_vertex('1')
+v = G.insert_vertex('2')
+w = G.insert_vertex('3')
+x = G.insert_vertex('4')
 
-G.insert_edge(u,v, "u-v")
-G.insert_edge(v,w, "v-w")
+G.insert_edge(u,v, u.element()+"-"+v.element())
+G.insert_edge(v,w, v.element()+"-"+w.element())
+G.insert_edge(u,x, u.element()+"-"+x.element())
+G.insert_edge(x,w, x.element()+"-"+w.element())
 
 print(G.vertex_count())
 print(G.edge_count())

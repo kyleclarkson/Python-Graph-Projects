@@ -1,4 +1,4 @@
-
+import csv
 
 # === Vertex Class ===
 class Vertex:
@@ -137,6 +137,18 @@ class Graph:
         self._incoming[v][u] = None
 
         return result
+
+    """
+    === Utility Methods ===
+    """
+    @staticmethod
+    def read_from_csv(filepath, directed=False):
+        # TODO: document how values of csv indicate graph structure.
+        pass
+
+
+
+
 
 
 
