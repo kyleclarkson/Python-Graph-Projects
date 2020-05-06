@@ -117,6 +117,13 @@ class Graph:
         self._outgoing[u][v] = e
         self._incoming[v][u] = e
 
+    def insert_edge(self, u, v):
+        """Insert edge, inferring label of edge for edge's element."""
+        name = u.element()+"-"+v.element()
+        e = Edge(u, v, name)
+        self._outgoing[u][v] = e
+        self._incoming[v][u] = e
+
     def remove_vertex(self, v):
         """ Remove a vertex and return its element."""
         result = Vertex.element(v)
@@ -143,9 +150,31 @@ class Graph:
     """
     @staticmethod
     def read_from_csv(filepath, directed=False):
-        # TODO: document how values of csv indicate graph structure.
-        pass
+        """
+        :param filepath: The location of the CSV file.
+        :param directed: Whether the graph should be directed or not. (This is not
+            inferred by contents of file.)
+        :return: A graph corresponding to csv file.
 
+        === CSV values ===
+        CSV file should be nxn shaped where the graph contains n vertices.
+            Vertices will be labeled 1,2, ..., n.
+        [i,j] row,col value indicates edge.
+            If empty, no edge.
+            If contains value (e.g. real number, string) value is set as edge element.
+        """
+
+        # TODO use pandas
+
+        # Read file as dictionary
+        with open(filepath, mode='r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            # Create vertices
+            num_vertices = len(csv_reader)
+            vertices = {}
+            vtx_count = 1
+            for idx in range(num_vertices):
+                vertices[vtx_count] = Vertex(vtx_count)
 
 
 
