@@ -15,7 +15,7 @@ def DFS(g, u, discovered):
             discovered[v] = edge
             DFS(g, v, discovered)
 
-def DFS_construct_vertex_path(u, v, discovered):
+def construct_vertex_path(u, v, discovered):
     """ Return u-v vertex path from DFS search. Is empty if none exists. """
 
     path = []
@@ -31,9 +31,8 @@ def DFS_construct_vertex_path(u, v, discovered):
         path.reverse()
     return path
 
-def DFS_construct_edge_path(u, v, discovered):
+def construct_edge_path(u, v, discovered):
     """ Return u-v edge path from DFS search. Is empty if none exists. """
-
     path = []
     if v in discovered:
         v_current = v
@@ -60,7 +59,7 @@ def BFS(g, s, discovered):
         next_level = []
         for u in current_level:
             for edge in g.incident_edges(u):
-                v = edge.opposite()
+                v = edge.opposite(u)
                 # Check that v is no discovered yet.
                 if v not in discovered:
                     discovered[v] = edge

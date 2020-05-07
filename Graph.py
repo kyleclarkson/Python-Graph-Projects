@@ -1,4 +1,5 @@
-import csv
+import math
+import pandas as pd
 
 # === Vertex Class ===
 class Vertex:
@@ -44,13 +45,16 @@ class Edge:
 class Graph:
     """ An implementation of a graph using an adjacency map. """
 
-    """ A map where:
+    """ 
+    _vertices: A map where keys are the vertex elements and values the vertices themselves.
+    _outgoing/_incoming: maps where:
             keys are vertices, and
             values are secondary incident map (stores edges incident to vertex.)
     """
-    __slots__ = '_outgoing', '_incoming'
+    __slots__ = '_vertices','_outgoing', '_incoming'
 
     def __init__(self, directed=False):
+        self._vertices = {}
         self._outgoing = {}
         # Graph is undirected, _incoming points to _outgoing.
         self._incoming = {} if directed else self._outgoing
@@ -76,10 +80,14 @@ class Graph:
 
     def edges(self):
         """ Returns all edges of graph. """
-        result = set() # Set will avoid adding double edges for undirected graph.
+        result = set() # 'set' will avoid adding double edges for undirected graph.
         for secondary_map in self._outgoing.values():
             result.update(secondary_map.values())
         return result
+
+    def get_vertex(self, element):
+        """ Return vertex corresponding to element key. """
+        return self._vertices.get(element)
 
     def get_edge(self, u, v):
         """ Return edge from u to v, None if d.n.e."""
@@ -105,6 +113,7 @@ class Graph:
     def insert_vertex(self, x=None):
         """ Insert and return a new vertex with element x."""
         v = Vertex(x)
+        self._vertices[v.element()] = v
         self._outgoing[v] = {}
         if self.is_directed():
             self._incoming[v] = {}
@@ -119,7 +128,7 @@ class Graph:
 
     def insert_edge(self, u, v):
         """Insert edge, inferring label of edge for edge's element."""
-        name = u.element()+"-"+v.element()
+        name = str(u.element())+"-"+str(v.element())
         e = Edge(u, v, name)
         self._outgoing[u][v] = e
         self._incoming[v][u] = e
@@ -127,6 +136,8 @@ class Graph:
     def remove_vertex(self, v):
         """ Remove a vertex and return its element."""
         result = Vertex.element(v)
+        # remove vertex from vertices map
+        del self._vertices[v.element()]
 
         # remove vertex by removing all edges incident to it
         self._outgoing[v] = None
@@ -140,8 +151,8 @@ class Graph:
         u = result[0]
         v = result[1]
         # Remove endpoint vertices
-        self._outgoing[u][v] = None
-        self._incoming[v][u] = None
+        del self._outgoing[u][v]
+        del self._incoming[v][u]
 
         return result
 
@@ -158,23 +169,36 @@ class Graph:
 
         === CSV values ===
         CSV file should be nxn shaped where the graph contains n vertices.
-            Vertices will be labeled 1,2, ..., n.
+            Vertices will be labeled as strings 1,2, ..., n.
         [i,j] row,col value indicates edge.
             If empty, no edge.
             If contains value (e.g. real number, string) value is set as edge element.
         """
+        # Read file as pandas dataframe
+        df = pd.read_csv(filepath, header=None)
+        array = df.to_numpy()
 
-        # TODO use pandas
+        result = Graph()
+        # Create vertices
+        num_vertices = df.shape[0]
+        vtx_count = 1
 
-        # Read file as dictionary
-        with open(filepath, mode='r') as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-            # Create vertices
-            num_vertices = len(csv_reader)
-            vertices = {}
-            vtx_count = 1
-            for idx in range(num_vertices):
-                vertices[vtx_count] = Vertex(vtx_count)
+        # Create vertices.
+        for idx in range(num_vertices):
+            # label vertices 1:n.
+            result.insert_vertex(str(vtx_count))
+            # vertices.append(Vertex(vtx_count))
+            vtx_count += 1
+
+        # Create edges.
+        for i, j in [(i, j) for i in range(len(array)) for j in range(len(array[i]))]:
+            if not math.isnan(array[i, j]):
+                # Add edge (i,j) with element corresponding to value in array.
+                u = result.get_vertex(str(i+1))
+                v = result.get_vertex(str(j+1))
+                result.insert_edge(u, v)
+
+        return result
 
 
 
