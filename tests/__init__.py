@@ -3,6 +3,7 @@ import Traversal
 
 # Test creating graph
 G = Graph()
+
 u = G.insert_vertex('u')
 v = G.insert_vertex('v')
 w = G.insert_vertex('w')
@@ -10,11 +11,11 @@ x = G.insert_vertex('x')
 
 G.insert_edge(u,v)
 G.insert_edge(v,w)
+G.insert_edge(w,x)
 G.insert_edge(u,x)
-G.insert_edge(x,w)
 
 print("=== Testing hardcoded graph ===")
-print("Vertex count: ",G.vertex_count())
+print("Vertex count: ", G.vertex_count())
 print("Edge count: ", G.edge_count())
 
 print("Edges incident to u: ", len(list(G.incident_edges(u))))
@@ -26,14 +27,14 @@ print("DFS test:")
 dfs_discovered = {u: None}
 Traversal.DFS(G, u, dfs_discovered)
 # Print vertices of path
-path = Traversal.construct_vertex_path(u, w, dfs_discovered)
+path = Traversal.construct_vertex_path(u, x, dfs_discovered)
 result = [vertex.element() for vertex in path]
-print("Vertices in u-w path:")
+print("Vertices in u-x path:")
 print(*result, sep=",")
 
 # Print edges of path
-print("Edges in u-w path:")
-path = Traversal.construct_edge_path(u, w, dfs_discovered)
+print("Edges in u-x path:")
+path = Traversal.construct_edge_path(u, x, dfs_discovered)
 result = [edge.element() for edge in path]
 print(*result, sep=",")
 
@@ -42,11 +43,11 @@ print("BFS test:")
 bfs_discovered = {u: None}
 Traversal.BFS(G, u , bfs_discovered)
 # Print vertices of path.
-path = Traversal.construct_vertex_path(u, w, bfs_discovered)
+path = Traversal.construct_vertex_path(u, x, bfs_discovered)
 result = [edge.element() for edge in path]
 print(*result, sep=",")
 # Print edges of path.
-path = Traversal.construct_edge_path(u, w, bfs_discovered)
+path = Traversal.construct_edge_path(u, x, bfs_discovered)
 result = [edge.element() for edge in path]
 print(*result, sep=",")
 
@@ -56,14 +57,14 @@ print("\n")
     === Test reading graph from csv file ===
 """
 print("=== Testing reading graph from csv file ===")
+del dfs_discovered
+del bfs_discovered
+# exit(1)
 
-exit(1)
-
-G = Graph.read_from_csv("../graph_files/g1.csv")
+G = Graph.read_from_csv("../graph_files/g1.csv", directed=False)
 print("Vertices of G: ", [v.element() for v in G.vertices()])
 
 root = G.get_vertex('1')
-print(type(root))
 # Test DFS
 dfs_discovered = {root: None}
 Traversal.DFS(G, u, dfs_discovered)

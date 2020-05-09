@@ -46,7 +46,7 @@ class Graph:
     """ An implementation of a graph using an adjacency map. """
 
     """ 
-    _vertices: A map where keys are the vertex elements and values the vertices themselves.
+    _vertices: A map where keys are the vertex elements and values vertices themselves.
     _outgoing/_incoming: maps where:
             keys are vertices, and
             values are secondary incident map (stores edges incident to vertex.)
@@ -113,6 +113,7 @@ class Graph:
     def insert_vertex(self, x=None):
         """ Insert and return a new vertex with element x."""
         v = Vertex(x)
+        # Key is vertex element, value is vertex.
         self._vertices[v.element()] = v
         self._outgoing[v] = {}
         if self.is_directed():
@@ -178,7 +179,7 @@ class Graph:
         df = pd.read_csv(filepath, header=None)
         array = df.to_numpy()
 
-        result = Graph()
+        result = Graph(directed=directed)
         # Create vertices
         num_vertices = df.shape[0]
         vtx_count = 1
@@ -200,6 +201,9 @@ class Graph:
 
         return result
 
+#TODO create element class with element name. Use this to insert into vertex
+# Test directed graph using manual creation.
+# Test read from csv. 
 
 
 
