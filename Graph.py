@@ -1,6 +1,8 @@
 import math
 import pandas as pd
 
+from TestContainer import Node, Arc
+
 # === Vertex Class ===
 class Vertex:
     """ Represents vertex of graph """
@@ -126,13 +128,7 @@ class Graph:
         e = Edge(u, v, x)
         self._outgoing[u][v] = e
         self._incoming[v][u] = e
-
-    def insert_edge(self, u, v):
-        """Insert edge, inferring label of edge for edge's element."""
-        name = str(u.element())+"-"+str(v.element())
-        e = Edge(u, v, name)
-        self._outgoing[u][v] = e
-        self._incoming[v][u] = e
+        return e
 
     def remove_vertex(self, v):
         """ Remove a vertex and return its element."""
@@ -161,6 +157,15 @@ class Graph:
     === Utility Methods ===
     """
     @staticmethod
+    def read_from_xml(filepath, directed=False):
+        """
+        :param filepath:
+        :param directed:
+        :return:
+        """
+        pass
+
+    @staticmethod
     def read_from_csv(filepath, directed=False):
         """
         :param filepath: The location of the CSV file.
@@ -187,6 +192,7 @@ class Graph:
         # Create vertices.
         for idx in range(num_vertices):
             # label vertices 1:n.
+
             result.insert_vertex(str(vtx_count))
             # vertices.append(Vertex(vtx_count))
             vtx_count += 1
@@ -200,10 +206,9 @@ class Graph:
                 result.insert_edge(u, v)
 
         return result
-
-#TODO create element class with element name. Use this to insert into vertex
-# Test directed graph using manual creation.
-# Test read from csv. 
+# TODO
+#   Test directed graph using manual creation.
+#   Test read from csv.
 
 
 

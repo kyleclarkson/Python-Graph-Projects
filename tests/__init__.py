@@ -1,18 +1,27 @@
 from Graph import Graph
+from TestContainer import Node, Arc
 import Traversal
 
 # Test creating graph
 G = Graph()
 
-u = G.insert_vertex('u')
-v = G.insert_vertex('v')
-w = G.insert_vertex('w')
-x = G.insert_vertex('x')
+u = G.insert_vertex(Node('u'))
+u.element().set_vertex(u)
+v = G.insert_vertex(Node('v'))
+v.element().set_vertex(v)
+w = G.insert_vertex(Node('w'))
+w.element().set_vertex(w)
+x = G.insert_vertex(Node('x'))
+x.element().set_vertex(x)
 
-G.insert_edge(u,v)
-G.insert_edge(v,w)
-G.insert_edge(w,x)
-G.insert_edge(u,x)
+e = G.insert_edge(u, v, Arc())
+e.element().set_edge(e)
+e = G.insert_edge(v, w, Arc())
+e.element().set_edge(e)
+e = G.insert_edge(w, x, Arc())
+e.element().set_edge(e)
+e = G.insert_edge(u, x, Arc())
+e.element().set_edge(e)
 
 print("=== Testing hardcoded graph ===")
 print("Vertex count: ", G.vertex_count())
@@ -21,7 +30,8 @@ print("Edge count: ", G.edge_count())
 print("Edges incident to u: ", len(list(G.incident_edges(u))))
 print("Edges incident to v: ", len(list(G.incident_edges(v))))
 
-print("Vertices of G: ", [v.element() for v in G.vertices()])
+print("Vertices of G: ", [v.element().__str__() for v in G.vertices()])
+print("Edges of G: ", [e.element().__str__() for e in G.edges()])
 # Test DFS
 print("DFS test:")
 dfs_discovered = {u: None}
