@@ -71,7 +71,7 @@ del dfs_discovered
 del bfs_discovered
 # exit(1)
 
-G = Graph.read_from_csv("../graph_files/g1.csv", directed=False)
+G = Graph.read_from_csv("../graph_files/g1.csv", directed=True)
 print("Vertices of G: ", [v.element() for v in G.vertices()])
 
 root = G.get_vertex('1')

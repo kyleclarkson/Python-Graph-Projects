@@ -192,8 +192,8 @@ class Graph:
         # Create vertices.
         for idx in range(num_vertices):
             # label vertices 1:n.
-
-            result.insert_vertex(str(vtx_count))
+            v = result.insert_vertex(Node(str(vtx_count)))
+            v.element().set_vertex(v)
             # vertices.append(Vertex(vtx_count))
             vtx_count += 1
 
@@ -203,8 +203,8 @@ class Graph:
                 # Add edge (i,j) with element corresponding to value in array.
                 u = result.get_vertex(str(i+1))
                 v = result.get_vertex(str(j+1))
-                result.insert_edge(u, v)
-
+                e = result.insert_edge(u, v, Arc())
+                e.element().set_edge(e)
         return result
 # TODO
 #   Test directed graph using manual creation.
