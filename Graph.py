@@ -19,6 +19,7 @@ class Vertex:
 
     def __hash__(self):
         """ The key that uniquely identifies this vertex. """
+        # return self._element().label()
         return hash(id(self))
 
 # === Edge Class ===

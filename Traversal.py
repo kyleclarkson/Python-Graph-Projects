@@ -1,4 +1,4 @@
-
+from copy import deepcopy
 
 def DFS(g, u, discovered):
     """ DFS traversal on undiscovered portion of graph G, from vertex u.
@@ -67,3 +67,21 @@ def BFS(g, s, discovered):
 
         current_level = next_level
 
+def floyd_warshall(g):
+    """ Returns the transitive closure of input graph g. """
+
+    closure = deepcopy(g)
+    vertices = list(closure.vertices())
+    n = len(vertices)
+
+    for k in range(n):
+        for i in range(n):
+            # Check not loop edge and edge exists.
+            if i != k and closure.get_edge(vertices[i], vertices[k]) is not None:
+                for j in range(n):
+                    # Check edge (k, j) exists
+                    if i != j != k and closure.get_edge(vertices[k], vertices[k]) is not None:
+                        # Add edge (i,j) to closure if  not present
+                        if closure.get_edge(vertices[i], vertices[j]) is not None:
+                            closure.insert_edge(vertices[i], vertices[j])
+    return closure

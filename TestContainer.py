@@ -13,6 +13,9 @@ class Node:
     def __str__(self):
         return str(self._label)
 
+    def __hash__(self):
+        return self._label
+
 class Arc:
     """ A container object for edges of graph. """
     __slots__ = "_weight", "_edge"
