@@ -1,6 +1,5 @@
 from Graph import Graph
 from TestContainer import Node, Arc
-import Traversal
 
 def Test_Undirected():
     # Test creating graph
@@ -36,29 +35,29 @@ def Test_Undirected():
     # Test DFS
     print("DFS test:")
     dfs_discovered = {u: None}
-    Traversal.DFS(G, u, dfs_discovered)
+    Graph.DFS(G, u, dfs_discovered)
     # Print vertices of path
-    path = Traversal.construct_vertex_path(u, x, dfs_discovered)
+    path = Graph.construct_vertex_path(u, x, dfs_discovered)
     result = [vertex.element() for vertex in path]
     print("Vertices in u-x path:")
     print(*result, sep=",")
 
     # Print edges of path
     print("Edges in u-x path:")
-    path = Traversal.construct_edge_path(u, x, dfs_discovered)
+    path = Graph.construct_edge_path(u, x, dfs_discovered)
     result = [edge.element() for edge in path]
     print(*result, sep=",")
 
     # Test BFS
     print("BFS test:")
     bfs_discovered = {u: None}
-    Traversal.BFS(G, u , bfs_discovered)
+    Graph.BFS(G, u , bfs_discovered)
     # Print vertices of path.
-    path = Traversal.construct_vertex_path(u, x, bfs_discovered)
+    path = Graph.construct_vertex_path(u, x, bfs_discovered)
     result = [edge.element() for edge in path]
     print(*result, sep=",")
     # Print edges of path.
-    path = Traversal.construct_edge_path(u, x, bfs_discovered)
+    path = Graph.construct_edge_path(u, x, bfs_discovered)
     result = [edge.element() for edge in path]
     print(*result, sep=",")
 
@@ -95,42 +94,78 @@ def Test_Directed():
     print("Edges incident to u: ", len(list(G.incident_edges(u))))
     print("Edges incident to v: ", len(list(G.incident_edges(v))))
 
+
     print("Vertices of G: ", [v.element().__str__() for v in G.vertices()])
     print("Edges of G: ", [e.element().__str__() for e in G.edges()])
     # Test DFS
     print("DFS test:")
     dfs_discovered = {u: None}
-    Traversal.DFS(G, u, dfs_discovered)
+    Graph.DFS(G, u, dfs_discovered)
     # Print vertices of path
-    path = Traversal.construct_vertex_path(u, v, dfs_discovered)
+    path = Graph.construct_vertex_path(u, v, dfs_discovered)
     result = [vertex.element() for vertex in path]
     print("Vertices in 0-5 path:")
     print(*result, sep=",")
 
     # Print edges of path
     print("Edges in 0-5 path:")
-    path = Traversal.construct_edge_path(u, v, dfs_discovered)
+    path = Graph.construct_edge_path(u, v, dfs_discovered)
     result = [edge.element() for edge in path]
     print(*result, sep=",")
 
     # Test BFS
     print("BFS test:")
     bfs_discovered = {u: None}
-    Traversal.BFS(G, u, bfs_discovered)
+    Graph.BFS(G, u, bfs_discovered)
     # Print vertices of path.
-    path = Traversal.construct_vertex_path(u, v, bfs_discovered)
+    path = Graph.construct_vertex_path(u, v, bfs_discovered)
     result = [edge.element() for edge in path]
     print(*result, sep=",")
     # Print edges of path.
-    path = Traversal.construct_edge_path(u, v, bfs_discovered)
+    path = Graph.construct_edge_path(u, v, bfs_discovered)
     result = [edge.element() for edge in path]
     print(*result, sep=",")
 
     print("\n")
 
+def Test_DAG():
+    G = Graph(directed=True)
+
+    vertices = {}
+    # Create vertices
+    for i in range(6):
+        v = G.insert_vertex(Node(i))
+        vertices[i] = v
+        v.element().set_vertex(v)
+
+    # Create edges
+    # list of edges
+    edges = [(0,1), (0,2),
+             (1,2), (1,3),
+             (2,3),
+             (3,4), (3,5),
+             (4,5)]
+
+    for e in edges:
+        edge = G.insert_edge(vertices[e[0]], vertices[e[1]], Arc())
+        edge.element().set_edge(edge)
+
+    print("=== Testing DAG graph ===")
+    print("Vertex count: ", G.vertex_count())
+    print("Edge count: ", G.edge_count())
+
+    print("Length of toposort: ", len(Graph.toplogical_sort(G)))
+    assert len(Graph.toplogical_sort(G)) == G.vertex_count(), "Graph contains topo ordering!"
+    edge = G.insert_edge(vertices[4],vertices[3], Arc())
+    edge.element().set_edge(edge)
+
+    print("Toposort length: ", len(Graph.toplogical_sort(G)))
+    assert len(Graph.toplogical_sort(G)) != G.vertices(), "Graph does not contain topo ordering!"
+
 
 if __name__ == '__main__':
-    Test_Directed()
+    Test_DAG()
+    # Test_Directed()
     # Test_Undirected()
 
 """
